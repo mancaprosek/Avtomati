@@ -1,0 +1,6 @@
+(executable
+ (name TekstovniVmesnik)
+ (libraries definicije)
+ (promote
+  (into ../..)
+  (until-clean)))
