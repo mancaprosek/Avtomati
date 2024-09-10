@@ -4,9 +4,9 @@ open Avtomat
 type stanje_vmesnika =
   | SeznamMoznosti
   | IzpisAvtomata
-  | BranjeNiza
-  | RezultatPrebranegaNiza
-  | OpozoriloONapacnemNizu
+  | IzbiraKave
+  | PripravaKave
+  | Servis
 
 type model = {
   avtomat : t;
@@ -16,27 +16,25 @@ type model = {
 
 type msg =
   | PreberiNiz of string
+  | PrekiniNarocilo of stanje_vmesnika
   | ZamenjajVmesnik of stanje_vmesnika
   | VrniVPrvotnoStanje
 
-let preberi_niz avtomat q niz =
-  let aux acc znak =
-    match acc with
-    | None -> None
-    | Some q -> Avtomat.prehodna_funkcija avtomat q znak
-  in
-  niz |> String.to_seq |> Seq.fold_left aux (Some q)
-
+(*Funkcija, ki posodobi model in vrne na začetek z določeno količino sestavin*)
+(*glede na možnost, ki je izbrana. SOS TLE SI NEKI DODALA, A DELA KULLL??*)
 let update model = function
   | PreberiNiz str -> (
       match preberi_niz model.avtomat model.stanje_avtomata str with
-      | None -> { model with stanje_vmesnika = OpozoriloONapacnemNizu }
+      | None -> { model with stanje_vmesnika = Servis }
       | Some stanje_avtomata ->
           {
             model with
             stanje_avtomata;
-            stanje_vmesnika = RezultatPrebranegaNiza;
+            stanje_vmesnika = PripravaKave;
           })
+  | PrekiniNarocilo stanje_vmesnika ->
+      print_endline "Naročilo je bilo prekinjeno. Vzemite vrnjen kovanec.";
+      { model with stanje_vmesnika }
   | ZamenjajVmesnik stanje_vmesnika -> { model with stanje_vmesnika }
   | VrniVPrvotnoStanje ->
       {
@@ -45,19 +43,22 @@ let update model = function
         stanje_vmesnika = SeznamMoznosti;
       }
 
+(*Fukcija, ki nam izpiše, kaj lahko počnemo*)
 let rec izpisi_moznosti () =
-  print_endline "1) izpiši avtomat";
-  print_endline "2) beri znake";
-  print_endline "3) nastavi na začetno stanje";
+  print_endline "Če želite naročiti kavo, vstavite kovanec.";
+  print_endline "1) Vstavi kovanec";
+  print_endline "2) Prekini naročilo";
+  print_endline "3) Izpis avtomata";
   print_string "> ";
   match read_line () with
-  | "1" -> ZamenjajVmesnik IzpisAvtomata
-  | "2" -> ZamenjajVmesnik BranjeNiza
-  | "3" -> VrniVPrvotnoStanje
+  | "1" -> ZamenjajVmesnik IzbiraKave
+  | "2" -> VrniVPrvotnoStanje
+  | "3" -> ZamenjajVmesnik IzpisAvtomata
   | _ ->
       print_endline "** VNESI 1, 2 ALI 3 **";
       izpisi_moznosti ()
 
+(*Funkcija, ki izpiše avtomat - glede na avtomat.ml datoteko.. PREMISLI, KAKO MORE BIT!*)
 let izpisi_avtomat avtomat =
   let izpisi_stanje stanje =
     let prikaz = Stanje.v_niz stanje in
@@ -71,29 +72,56 @@ let izpisi_avtomat avtomat =
   in
   List.iter izpisi_stanje (seznam_stanj avtomat)
 
-let beri_niz _model =
-  print_string "Vnesi niz > ";
-  let str = read_line () in
-  PreberiNiz str
+let rec izbira_kave _model =
+  print_endline "Izberite željen napitek:";
+  print_endline "1) Espreso";
+  print_endline "2) Americano";
+  print_endline "3) Capuccino";
+  print_endline "4) Bela kava";
+  print_endline "5) Prekini naročilo";
+  match read_line () with
+  | "1" -> PreberiNiz "1"
+  | "2" -> PreberiNiz "2"
+  | "3" -> PreberiNiz "3"
+  | "4" -> PreberiNiz "4"
+  | "5" -> PrekiniNarocilo SeznamMoznosti
+  | _ ->
+      print_endline "** VNESI ŠTEVILO OD 1 DO 5 **";
+      izbira_kave _model
 
-let izpisi_rezultat model =
-  if je_sprejemno_stanje model.avtomat model.stanje_avtomata then
-    print_endline "Niz je bil sprejet"
-  else print_endline "Niz ni bil sprejet"
+(*Funkcija, ki pripravi kavo oziroma prekine naročilo, če primankuje sestavin.*)
+(*Potrebno je narediti časovni zamik, ko se kava kuha.*)
+let priprava_kave model =
+  match je_sprejemno_stanje model.avtomat model.stanje_avtomata with
+  | true ->
+    print_endline "Napitek je v pripravi. Napitek je pripravljen.";
+    ZamenjajVmesnik SeznamMoznosti
+  | false -> 
+    print_endline "Naročilo je bilo prekinjeno. Kavomatu primankuje sestavin.";
+    ZamenjajVmesnik Servis
 
+(*Fukcija, ki se prikaže, ko kavomatu zmanka sestavin.*)
+let rec servis _model =
+  print_endline "Čakam na serviserja";
+  print_endline "0) Serviser je opravil svoje delo.";
+  match read_line () with
+  | "0" -> 
+      print_endline "Avtomat je ponovno v delujočem stanju.";
+      VrniVPrvotnoStanje
+  | _ -> servis _model
+
+(*Gonilna funkcija, ki nam prikazuje model in vsakemu stanju priredi, kaj naj se zgodi*)
 let view model =
   match model.stanje_vmesnika with
   | SeznamMoznosti -> izpisi_moznosti ()
   | IzpisAvtomata ->
       izpisi_avtomat model.avtomat;
       ZamenjajVmesnik SeznamMoznosti
-  | BranjeNiza -> beri_niz model
-  | RezultatPrebranegaNiza ->
-      izpisi_rezultat model;
-      ZamenjajVmesnik SeznamMoznosti
-  | OpozoriloONapacnemNizu ->
-      print_endline "Niz ni veljaven";
-      ZamenjajVmesnik SeznamMoznosti
+  | IzbiraKave -> izbira_kave model
+  | PripravaKave ->
+      priprava_kave model;
+  | Servis -> 
+      servis model
 
 let init avtomat =
   {
