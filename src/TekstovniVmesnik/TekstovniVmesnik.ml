@@ -105,8 +105,7 @@ let rec servis _model =
   print_endline "Čakam na serviserja";
   print_endline "0) Serviser je opravil svoje delo.";
   match read_line () with
-  | "0" -> 
-      print_endline "Avtomat je ponovno v delujočem stanju.";
+  | "0" ->
       VrniVPrvotnoStanje
   | _ -> servis _model
 
