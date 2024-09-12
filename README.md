@@ -46,4 +46,4 @@ pa so shranjene datoteke, ki implementirajo avtomat.
 
 ## Viri
 
-Projekt je narejen po zgledu projekta iz vira `https://github.com/matijapretnar/programiranje-1/tree/master/projekt`.
+Projekt je narejen po zgledu iz vira https://github.com/matijapretnar/programiranje-1/tree/master/projekt.
