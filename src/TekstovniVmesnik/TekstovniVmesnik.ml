@@ -36,6 +36,7 @@ let update model = function
       { model with stanje_vmesnika }
   | ZamenjajVmesnik stanje_vmesnika -> { model with stanje_vmesnika }
   | VrniVPrvotnoStanje ->
+      print_endline "Obisk serviserja je bil uspešen. Kavomat je napolnjen.";
       {
         model with
         stanje_avtomata = zacetno_stanje model.avtomat;
@@ -45,19 +46,18 @@ let update model = function
 (*Fukcija, ki nam izpiše, kaj lahko počnemo, ko ga zaženemo*)
 let rec izpisi_moznosti () =
   print_endline "Če želite naročiti kavo, vstavite kovanec.";
+  print_endline "0) Servis";
   print_endline "1) Vstavi kovanec";
-  print_endline "2) Prekini naročilo";
-  print_endline "3) Izpis avtomata";
+  print_endline "2) Izpis avtomata";
   print_string "> ";
   match read_line () with
   | "1" -> ZamenjajVmesnik IzbiraKave
-  | "2" -> VrniVPrvotnoStanje
-  | "3" -> ZamenjajVmesnik IzpisAvtomata
+  | "0" -> VrniVPrvotnoStanje
+  | "2" -> ZamenjajVmesnik IzpisAvtomata
   | _ ->
-      print_endline "** VNESI 1, 2 ALI 3 **";
+      print_endline "** VNESI 0, 1 ALI 2 **";
       izpisi_moznosti ()
 
-(*Funkcija, ki izpiše avtomat - glede na avtomat.ml datoteko.. PREMISLI, KAKO MORE BIT!*)
 let izpisi_avtomat avtomat =
   let izpisi_stanje stanje =
     let prikaz = Stanje.v_niz stanje in
@@ -73,19 +73,21 @@ let izpisi_avtomat avtomat =
 
 let rec izbira_kave _model =
   print_endline "Izberite željen napitek:";
+  print_endline "0) Servis ";
   print_endline "1) Espreso";
   print_endline "2) Americano";
   print_endline "3) Capuccino";
   print_endline "4) Bela kava";
   print_endline "5) Prekini naročilo";
   match read_line () with
+  | "0" -> VrniVPrvotnoStanje
   | "1" -> PreberiNiz "1"
   | "2" -> PreberiNiz "2"
   | "3" -> PreberiNiz "3"
   | "4" -> PreberiNiz "4"
   | "5" -> PrekiniNarocilo SeznamMoznosti
   | _ ->
-      print_endline "** VNESI ŠTEVILO OD 1 DO 5 **";
+      print_endline "** VNESI ŠTEVILO OD 0 DO 5 **";
       izbira_kave _model
 
 (*Funkcija, ki določi ali je dovolj sestavin za pripravo kave.*)
