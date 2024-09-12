@@ -28,6 +28,10 @@ $(\{0, 1, 2, 3, 4, 5\}, \{q_0, q_1, q_2, q_3, q_4\}, q_0, \{q_0, q_1, q_2, q_3\}
 | $q_3$    | $q_0$ | $q_4$ | $q_4$ | $q_4$ | $q_4$ | $q_3$ |
 | $q_4$    | $q_0$ | $q_4$ | $q_4$ | $q_4$ | $q_4$ | $q_4$ |
 
+Znak $0$ predstavlja obisk serviserja in kavomat vedno pošlje v začetno stanje, števila $1,2,3,4$ so različni napitki, ki jih lahko naročimo, in
+vsak pripravljen napitek avtomat pomakne za eno stanje naprej, število $5$ pa je preklic naročila, ki nas vrne v isto stanje kot smo bili preden 
+smo naročilo začeli.
+
 ## Navodila za uporabo
 
 Program zaženemo preko tekstovnega vmesnka. In sicer v mapi, kjer imamo shranjene vse datoteke, odpremo terminal in vanj napišemo ukaz `dune build`.
