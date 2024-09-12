@@ -17,6 +17,8 @@ Končni avtomat je definiran kot nabor $(\Sigma, Q, q_0, F, \delta)$, kjer so:
 - $F \subseteq Q$ množica sprejemnih stanj in
 - $\delta : Q \times \Sigma \to Q$ prehodna funkcija.
 
+## Kavomat
+
 Primer kavomata implementiranega v tej projektni nalogi predstavimo z naborom 
 $(\{0, 1, 2, 3, 4, 5\}, \{q_0, q_1, q_2, q_3, q_4\}, q_0, \{q_0, q_1, q_2, q_3\}, \delta)$, kjer je $\delta$ podana z naslednjo tabelo:
 
@@ -42,3 +44,6 @@ To nam ustvari datoteko `tekstovniVmesnik.exe`, ki bo pognala program. Poženemo
 V mapi `src` imamo shranjene datoteke v dveh podmapah. V mapi `TekstovniVmesnik` imamo glavno datoteko, ki poganja tekstovni vmesnik, v mapi `Definicije`
 pa so shranjene datoteke, ki implementirajo avtomat.
 
+## Viri
+
+Projekt je narejen po zgledu projekta iz vira `https://github.com/matijapretnar/programiranje-1/tree/master/projekt`.
