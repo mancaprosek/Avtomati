@@ -20,8 +20,7 @@ type msg =
   | ZamenjajVmesnik of stanje_vmesnika
   | VrniVPrvotnoStanje
 
-(*Funkcija, ki posodobi model in vrne na začetek z določeno količino sestavin*)
-(*glede na možnost, ki je izbrana. SOS TLE SI NEKI DODALA, A DELA KULLL??*)
+(*Funkcija, ki posodobi model*)
 let update model = function
   | PreberiNiz str -> (
       match preberi_niz model.avtomat model.stanje_avtomata str with
@@ -43,7 +42,7 @@ let update model = function
         stanje_vmesnika = SeznamMoznosti;
       }
 
-(*Fukcija, ki nam izpiše, kaj lahko počnemo*)
+(*Fukcija, ki nam izpiše, kaj lahko počnemo, ko ga zaženemo*)
 let rec izpisi_moznosti () =
   print_endline "Če želite naročiti kavo, vstavite kovanec.";
   print_endline "1) Vstavi kovanec";
@@ -66,7 +65,7 @@ let izpisi_avtomat avtomat =
       if stanje = zacetno_stanje avtomat then "-> " ^ prikaz else prikaz
     in
     let prikaz =
-      if je_sprejemno_stanje avtomat stanje then prikaz ^ " +" else prikaz
+      if je_sprejemno_stanje avtomat stanje then prikaz ^ " + " else prikaz
     in
     print_endline prikaz
   in
@@ -89,8 +88,7 @@ let rec izbira_kave _model =
       print_endline "** VNESI ŠTEVILO OD 1 DO 5 **";
       izbira_kave _model
 
-(*Funkcija, ki pripravi kavo oziroma prekine naročilo, če primankuje sestavin.*)
-(*Potrebno je narediti časovni zamik, ko se kava kuha.*)
+(*Funkcija, ki določi ali je dovolj sestavin za pripravo kave.*)
 let priprava_kave model =
   match je_sprejemno_stanje model.avtomat model.stanje_avtomata with
   | true ->
@@ -110,7 +108,7 @@ let rec servis _model =
       VrniVPrvotnoStanje
   | _ -> servis _model
 
-(*Gonilna funkcija, ki nam prikazuje model in vsakemu stanju priredi, kaj naj se zgodi*)
+(*Funkcija, ki nam prikazuje model in vsakemu stanju vmesnika priredi, kaj naj se zgodi.*)
 let view model =
   match model.stanje_vmesnika with
   | SeznamMoznosti -> izpisi_moznosti ()

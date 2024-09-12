@@ -9,7 +9,7 @@ type t = {
 
 let prazen_avtomat zacetno_stanje =
   {
-    stanja = [ zacetno_stanje ];
+    stanja = [];
     zacetno_stanje;
     sprejemna_stanja = [];
     prehodi = [];
@@ -44,7 +44,6 @@ let seznam_prehodov avtomat = avtomat.prehodi
 let je_sprejemno_stanje avtomat stanje =
   List.mem stanje avtomat.sprejemna_stanja
 
-(*Tukaj imamo funkcijo prehodov, kaj mormo točno nardit, da bo to zdej gud*)
 let enke_1mod3 =
   let q0 = Stanje.iz_niza "q0"
   and q1 = Stanje.iz_niza "q1"
