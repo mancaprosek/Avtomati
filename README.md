@@ -5,7 +5,7 @@ V projektu je implementiran Moorov avtomat na primeru kavomata.
 Kavomat deluje tako, da moraš najprej vstaviti žeton, za tem si izbereš željen napitek in če ima kavomat dovolj sestavin, ti napitek pripravi. V primeru, da mu
 je sestavin zmanjkalo, je kavomat potrebno napolniti s sestavinami, preden lahko ponovno deluje. Kavomat se lahko napolne tudi na vmesnem koraku, naročilo napitka
 pa se lahko prekine, če si ga še nismo izbrali. Ker je kavomat majhen ima žal sestavin samo za tri napitke, potem pa ga je potrebno ponovno napolniti oziroma
-opraviti serviserja.
+poklicati serviserja.
 
 ## Matematična definicija
 
